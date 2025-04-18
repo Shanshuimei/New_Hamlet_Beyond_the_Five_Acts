@@ -6,12 +6,11 @@ export default defineConfig({
   base: '/New_Hamlet_Beyond_the_Five_Acts/',
   server: {
     proxy: {
-      '/api': {
-        target: 'http://103.194.106.155', 
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '/v1/chat-messages'),
-        secure: false
-      }
+      // '/api': {
+      //   target: 'http://103.194.106.155', 
+      //   changeOrigin: true,
+      //   secure: false
+      // }
     }
   }
 })
