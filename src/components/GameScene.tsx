@@ -43,7 +43,7 @@ const GameScene: React.FC<GameSceneProps> = ({
 
   // Move all function definitions here
   const getBackgroundImage = () => {
-    return `/New_Hamlet/images/${selectedMap}.png`;
+    return `images/${selectedMap}.png`;
   };
 
   const getCharacterImage = (character: string) => {
@@ -51,7 +51,7 @@ const GameScene: React.FC<GameSceneProps> = ({
       '鬼魂': '老国王',
     };
     const imageName = characterMap[character] || character;
-    return `/New_Hamlet/images/${imageName}.png`;
+    return `images/${imageName}.png`;
   };
 
   const calculateCharacterStyles = (characters: string[] = []) => {

@@ -51,13 +51,13 @@ const characterDescriptions = {
 };
 
 const characters = [
-  { id: 1, img: "/New_Hamlet/images/奥菲利娅.png", name: "奥菲利娅" },
-  { id: 2, img: "/New_Hamlet/images/波洛涅斯.png", name: "波洛涅斯" },
-  { id: 3, img: "/New_Hamlet/images/霍拉旭.png", name: "霍拉旭" },
-  { id: 4, img: "/New_Hamlet/images/克劳狄斯.png", name: "克劳狄斯" },
-  { id: 5, img: "/New_Hamlet/images/老国王.png", name: "老国王" },
-  { id: 6, img: "/New_Hamlet/images/雷欧提斯.png", name: "雷欧提斯" },
-  { id: 7, img: "/New_Hamlet/images/王后.png", name: "格特鲁德"}
+  { id: 1, img: "images/奥菲利娅.png", name: "奥菲利娅" },
+  { id: 2, img: "images/波洛涅斯.png", name: "波洛涅斯" },
+  { id: 3, img: "images/霍拉旭.png", name: "霍拉旭" },
+  { id: 4, img: "images/克劳狄斯.png", name: "克劳狄斯" },
+  { id: 5, img: "images/老国王.png", name: "老国王" },
+  { id: 6, img: "images/雷欧提斯.png", name: "雷欧提斯" },
+  { id: 7, img: "images/王后.png", name: "格特鲁德"}
 ];
 
 const CharacterIntro: React.FC<CharacterIntroProps> = ({ onComplete }) => {

@@ -45,11 +45,11 @@ const MapSelection: React.FC<MapSelectionProps> = ({ onComplete, sceneCount = 0 
   const [, setSceneCharacters] = useState<string[]>([]);
   
   const maps = [
-    { image: "/New_Hamlet/images/波洛涅斯家中一室.png", text: "波洛涅斯家中一室" },
-    { image: "/New_Hamlet/images/城堡大厅.png", text: "城堡大厅" },
-    { image: "/New_Hamlet/images/城堡露台.png", text: "城堡露台" },
-    { image: "/New_Hamlet/images/城堡中一室.png", text: "城堡中一室" },
-    { image: "/New_Hamlet/images/王后寝宫.png", text: "王后寝宫" }
+    { image: "images/波洛涅斯家中一室.png", text: "波洛涅斯家中一室" },
+    { image: "images/城堡大厅.png", text: "城堡大厅" },
+    { image: "images/城堡露台.png", text: "城堡露台" },
+    { image: "images/城堡中一室.png", text: "城堡中一室" },
+    { image: "images/王后寝宫.png", text: "王后寝宫" }
   ];
 
   // 添加函数：根据场景和概率生成人物列表
