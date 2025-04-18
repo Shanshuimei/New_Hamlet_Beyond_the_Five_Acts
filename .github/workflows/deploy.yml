@@ -24,7 +24,6 @@ env:
   # Set the build directory
   VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
   VITE_API_URL: ${{ secrets.VITE_API_URL }}
-  VITE_API_MODEL: ${{ secrets.VITE_API_MODEL }}
 
 jobs:
   # Single deploy job since we're just deploying
