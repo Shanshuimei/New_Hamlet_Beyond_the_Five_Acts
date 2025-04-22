@@ -33,7 +33,6 @@ function App() {
   };
   // 添加剧本记录状态
   const [script, setScript] = useState<string[]>([]);
-  const [endingContent, setEndingContent] = useState<string>('');
   const [sceneCount, setSceneCount] = useState<number>(0);
 
   // 添加记忆更新处理函数
@@ -54,8 +53,11 @@ function App() {
       .join('\n');
     
     const newScene = `${sceneTitle}\n${sceneContent}\n\n`;
-    setScript(prev => [...prev, newScene]);
-    setSceneCount(prev => prev + 1);
+    // 只有当对话内容非空时才添加场景并增加计数
+    if (sceneContent.trim()) {
+      setScript(prev => [...prev, newScene]);
+      setSceneCount(prev => prev + 1);
+    }
 
     // 输出剧本更新信息
     console.log('剧本更新：', {
@@ -65,6 +67,14 @@ function App() {
       对话内容: dialogues,
       完整场景: newScene
     });
+  };
+
+  // 添加结局到剧本的处理函数
+  const handleAddEndingToScript = (endingText: string) => {
+    const endingTitle = `最终幕 结局`;
+    const endingScene = `${endingTitle}\n${endingText}\n\n`;
+    setScript(prev => [...prev, endingScene]);
+    console.log('结局已添加到剧本:', endingScene);
   };
 
   // 将 handleMapSelectionComplete 函数移到组件内部
@@ -190,8 +200,8 @@ function App() {
             characterGoals={characterGoals}
             onGoalsUpdate={handleGoalsUpdate}
             onExit={() => {
+              // 达到5幕后直接进入结局状态，不再传递endingContent
               if (sceneCount >= 5) {
-                setEndingContent(script.join(''));
                 setGameState('ending');
               } else {
                 setGameState('map_selection');
@@ -210,7 +220,7 @@ function App() {
           transition={{ duration: 0.5 }}
         >
           <Ending 
-            endingContent={endingContent} 
+            onAddEndingToScript={handleAddEndingToScript} // 传递添加结局的函数
             onComplete={() => {
               // 回到主页时重置所有流程相关状态，防止直接跳转ending和结局重复
               setGameState('start');
@@ -220,7 +230,7 @@ function App() {
               setSceneCharacters([]);
               setGlobalMemories({});
               setCharacterGoals({});
-              setEndingContent('');
+              // 不再需要重置 endingContent
             }} 
             sceneCharacters={sceneCharacters}
             characterMemories={globalMemories}

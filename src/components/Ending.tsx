@@ -3,15 +3,15 @@ import { motion } from 'framer-motion';
 
 interface EndingProps {
   conversationId?: string;
-  endingContent?: string;
   onComplete: () => void;
+  onAddEndingToScript: (endingText: string) => void; // 添加新属性
   sceneCharacters?: string[];
   characterMemories?: Record<string, string>;
   characterGoals?: Record<string, string>;
   script?: string[];
 }
 
-const Ending: React.FC<EndingProps> = ({ conversationId, onComplete, sceneCharacters = [], characterMemories = {}, characterGoals = {}, script = [] }) => {
+const Ending: React.FC<EndingProps> = ({ conversationId, onComplete, onAddEndingToScript, sceneCharacters = [], characterMemories = {}, characterGoals = {}, script = [] }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -84,8 +84,11 @@ const Ending: React.FC<EndingProps> = ({ conversationId, onComplete, sceneCharac
               
             if (event.event === 'node_finished' && event.data?.title === '结局撰写') {
               if (event.data?.outputs?.text) {
-                setDisplayedText(event.data.outputs.text);
+                const finalEndingText = event.data.outputs.text;
+                setDisplayedText(finalEndingText);
                 setIsLoading(false);
+                // 在结局加载完成后调用函数将其添加到剧本
+                onAddEndingToScript(finalEndingText);
                 break; // 获取到完整结局后跳出循环
               }
             }
