@@ -211,10 +211,21 @@ function App() {
         >
           <Ending 
             endingContent={endingContent} 
-            onComplete={() => setGameState('map_selection')} 
+            onComplete={() => {
+              // 回到主页时重置所有流程相关状态，防止直接跳转ending和结局重复
+              setGameState('start');
+              setSceneCount(0);
+              setScript([]);
+              setSelectedMap('');
+              setSceneCharacters([]);
+              setGlobalMemories({});
+              setCharacterGoals({});
+              setEndingContent('');
+            }} 
             sceneCharacters={sceneCharacters}
             characterMemories={globalMemories}
             characterGoals={characterGoals}
+            script={script} // 确保传递 script
           />
         </motion.div>
       )}

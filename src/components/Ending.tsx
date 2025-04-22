@@ -15,9 +15,11 @@ const Ending: React.FC<EndingProps> = ({ conversationId, onComplete, sceneCharac
   const [displayedText, setDisplayedText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const hasFetched = useRef(false); // 使用 useRef 创建持久化标志
 
   useEffect(() => {
-    const fetchEnding = async () => {  
+    // 移除旧的 called 变量
+    const fetchEnding = async () => {
     // 获取结局内容并处理流式响应
       try {
         const response = await fetch(import.meta.env.VITE_API_URL, {
@@ -100,9 +102,12 @@ const Ending: React.FC<EndingProps> = ({ conversationId, onComplete, sceneCharac
         setIsLoading(false);
       }
     };
-    
-    fetchEnding();
-  }, [conversationId, onComplete]);
+    if (!hasFetched.current) { // 检查 ref 的 current 值
+      hasFetched.current = true; // 设置 ref 的 current 值为 true
+      fetchEnding();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify({sceneCharacters, characterMemories, characterGoals, script})]);
 
   const downloadRef = useRef<HTMLAnchorElement>(null);
   
@@ -118,6 +123,13 @@ const Ending: React.FC<EndingProps> = ({ conversationId, onComplete, sceneCharac
     }
     
     URL.revokeObjectURL(url);
+  };
+
+  const handleReturnToHome = () => {
+    // 清空本地存储
+    localStorage.clear();
+    // 调用onComplete回到主页
+    onComplete();
   };
 
   return (
@@ -153,13 +165,13 @@ const Ending: React.FC<EndingProps> = ({ conversationId, onComplete, sceneCharac
                           >
                               {displayedText}
                           </pre><motion.button
-                              onClick={onComplete}
+                              onClick={handleReturnToHome}
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.95 }}
-                              className="mt-8 bg-yellow-400 text-black py-3 px-8 rounded-full mx-auto block shadow-lg"
+                              className="mt-8 px-6 py-3 bg-transparent text-white border border-white rounded-lg hover:bg-white hover:text-black transition-colors mx-auto block font-['字心坊李林哥特体简体中文'] text-xl" // 修改这里的 className
                           >
                                   <span className="text-xl tracking-[0.2em] uppercase" style={{ fontFamily: "'字心坊李林哥特体简体中文', serif" }}>
-                                      返回地图
+                                      回到主页
                                   </span>
                               </motion.button></>
         )}

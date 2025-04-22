@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CircularGallery from './CircularGallery';
 
 interface MapSelectionProps {
@@ -41,6 +41,12 @@ const sceneCharacterProbabilities: Record<string, Record<string, number>> = {
 };
 
 const MapSelection: React.FC<MapSelectionProps> = ({ onComplete, sceneCount = 0 }) => {
+  // 添加useEffect监听sceneCount变化
+  useEffect(() => {
+    if (sceneCount >= 5) {
+      onComplete('ending', []);
+    }
+  }, [sceneCount, onComplete]);
   const [selectedMapIndex, setSelectedMapIndex] = useState(0);
   const [, setSceneCharacters] = useState<string[]>([]);
   
@@ -135,17 +141,7 @@ const MapSelection: React.FC<MapSelectionProps> = ({ onComplete, sceneCount = 0 
         >
           确认选择
         </button>
-
-        {sceneCount >= 5 && (
-          <button
-            className="px-6 py-3 bg-white text-black border border-black rounded-lg hover:bg-black hover:text-white transition-colors font-['字心坊李林哥特体简体中文'] text-xl"
-            onClick={() => {
-              onComplete('ending', []);
-            }}
-          >
-            进入结局
-          </button>
-        )}
+        {/* 移除进入结局按钮 */}
       </div>
     </div>
   );
