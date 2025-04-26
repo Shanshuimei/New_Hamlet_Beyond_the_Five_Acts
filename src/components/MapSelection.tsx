@@ -121,8 +121,15 @@ const MapSelection: React.FC<MapSelectionProps> = ({ onComplete, sceneCount = 0 
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen bg-black">
-      <h1 className="text-white text-4xl mb-8 font-['字心坊李林哥特体简体中文'] z-10">选择场景</h1>
+      <h1 className="text-white text-4xl mb-4 font-['字心坊李林哥特体简体中文'] z-10">选择场景</h1>
       
+      {/* 添加剩余幕数提示 */} 
+      {sceneCount < 5 && (
+        <div className="text-white text-2xl font-['字心坊李林哥特体简体中文'] mb-4 z-10"> {/* 调整位置和样式 */}
+          距离最终幕还剩{5 - sceneCount}幕
+        </div>
+      )}
+
       <div style={{ height: '600px', width: '100%', position: 'relative', zIndex: 1 }}>
         <CircularGallery 
           items={maps}

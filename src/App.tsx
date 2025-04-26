@@ -5,6 +5,7 @@ import 'animate.css';
 import './index.css';
 import Transition from './components/Transition';
 import CharacterIntro from './components/CharacterIntro';
+import Guide from './components/Guide'; // 导入新的引导组件
 import MapSelection from './components/MapSelection';  // 导入新组件
 import GameScene from './components/GameScene';
 import Ending from './components/Ending';
@@ -13,7 +14,7 @@ import Ending from './components/Ending';
 type CharacterGoals = Record<string, string>;
 
 
-type GameState = 'start' | 'transition' | 'character_intro' | 'map_selection' | 'game_scene' | 'ending';
+type GameState = 'start' | 'transition' | 'guide' | 'character_intro' | 'map_selection' | 'game_scene' | 'ending'; // 添加 guide 状态
 
 function App() {
   const [gameState, setGameState] = useState<GameState>('start');
@@ -154,7 +155,18 @@ function App() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Transition onComplete={() => setGameState('character_intro')} />
+          <Transition onComplete={() => setGameState('guide')} /> // 过渡动画完成后跳转到引导页面
+        </motion.div>
+      )}
+      {gameState === 'guide' && (
+        <motion.div
+          key="guide"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Guide onContinue={() => setGameState('character_intro')} /> {/* 显示引导页面，点击继续后跳转到角色介绍 */}
         </motion.div>
       )}
       {gameState === 'character_intro' && (
