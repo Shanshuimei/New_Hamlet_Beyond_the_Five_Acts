@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import CircularGallery from './CircularGallery';
 
 interface MapSelectionProps {
@@ -41,6 +41,7 @@ const sceneCharacterProbabilities: Record<string, Record<string, number>> = {
 };
 
 const MapSelection: React.FC<MapSelectionProps> = ({ onComplete, sceneCount = 0 }) => {
+  const [showGuide, setShowGuide] = useState(false);
   // 添加useEffect监听sceneCount变化
   useEffect(() => {
     if (sceneCount >= 5) {
@@ -48,7 +49,7 @@ const MapSelection: React.FC<MapSelectionProps> = ({ onComplete, sceneCount = 0 
     }
   }, [sceneCount, onComplete]);
   const [selectedMapIndex, setSelectedMapIndex] = useState(0);
-  const [, setSceneCharacters] = useState<string[]>([]);
+  const sceneCharactersRef = useRef<string[]>([]);
   
   const maps = [
     { image: "images/波洛涅斯家中一室.png", text: "波洛涅斯家中一室" },
@@ -87,7 +88,7 @@ const MapSelection: React.FC<MapSelectionProps> = ({ onComplete, sceneCount = 0 
     // console.log(`点击确认选择地图: ${maps[index].text}`);
     const selectedMap = maps[index].text;
     const characters = generateCharacters(selectedMap);
-    setSceneCharacters(characters);
+    sceneCharactersRef.current = characters;
     
     // console.log(`选择了地图: ${selectedMap}, 索引: ${index}`);
     // console.log(`生成的人物: ${characters.join(', ')}`);
@@ -120,16 +121,47 @@ const MapSelection: React.FC<MapSelectionProps> = ({ onComplete, sceneCount = 0 
   };
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen bg-black">
+    <div className="relative flex flex-col items-center justify-center min-h-screen bg-black" onClick={() => setShowGuide(false)}>
+      <div className="absolute top-4 left-4 z-50">
+        <button 
+          onClick={(event: React.MouseEvent) => {
+  setShowGuide(true);
+  event.stopPropagation();
+}}
+          className="absolute top-4 left-4 z-50 bg-black/20 rounded-full w-10 h-10 flex items-center justify-center text-xl font-bold text-white hover:text-white/80 transition-colors"
+        >
+          ?
+        </button>
+      </div>
+      {/* 游戏引导弹窗 */}
+      {showGuide && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 overflow-auto flex items-center justify-center p-4">
+          <div className="max-w-2xl rounded-lg p-4 bg-black/40 border border-white/10">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-white text-xl font-bold">游戏引导</h2>
+              <button
+                onClick={() => setShowGuide(false)}
+                className="text-white/60 hover:text-white/90 transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="text-white space-y-4">
+              <p>你可以随意进入任何场景，点击确认选择进入对应场景。</p>
+              <p className="mt-4">每个场景中出现的角色都是随机的，但是角色出现概率不同。</p>
+              <p className="mt-4">你一共有5次进入场景与场景中所有角色对话的机会，对应5幕。</p>
+              <p className="mt-4">当你完成5幕对话后，将立马进入结局页面。</p>
+            </div>
+          </div>
+        </div>
+      )}
       <h1 className="text-white text-4xl mb-4 font-['字心坊李林哥特体简体中文'] z-10">选择场景</h1>
-      
       {/* 添加剩余幕数提示 */} 
       {sceneCount < 5 && (
         <div className="text-white text-2xl font-['字心坊李林哥特体简体中文'] mb-4 z-10"> {/* 调整位置和样式 */}
           距离最终幕还剩{5 - sceneCount}幕
         </div>
       )}
-
       <div style={{ height: '600px', width: '100%', position: 'relative', zIndex: 1 }}>
         <CircularGallery 
           items={maps}
@@ -140,7 +172,6 @@ const MapSelection: React.FC<MapSelectionProps> = ({ onComplete, sceneCount = 0 
           onItemSelect={handleMapChange}
         />
       </div>
-      
       <div className="flex flex-col items-center gap-4 mt-8">
         <button 
           className="px-6 py-3 bg-transparent text-white border border-white rounded-lg hover:bg-white hover:text-black transition-colors font-['字心坊李林哥特体简体中文'] text-xl"

@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import 'animate.css';
+import CharacterInfoPopup from './CharacterInfoPopup';
 
 interface GameSceneProps {
   selectedMap: string;
@@ -33,6 +34,18 @@ const GameScene: React.FC<GameSceneProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState('');
   const [showHistory, setShowHistory] = useState(false);
+  const [selectedCharacter, setSelectedCharacter] = useState<string>('');
+  const [showCharacterInfo, setShowCharacterInfo] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
+  
+  const toggleGuide = () => setShowGuide(!showGuide);
+  
+  const handleCharacterClick = (character: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedCharacter(character);
+    setShowCharacterInfo(true);
+  };
+  
   // 添加本地记忆状态
   const [localMemories, setLocalMemories] = useState(characterMemories || {});
   // 修改为使用传入的初始目标状态
@@ -258,6 +271,49 @@ const GameScene: React.FC<GameSceneProps> = ({
 
   return (
     <div className="h-screen flex flex-col overflow-hidden relative">
+      {/* 问号按钮 */}
+      <button 
+        className="absolute top-4 left-4 z-50 bg-black/20 rounded-full w-10 h-10 flex items-center justify-center text-xl font-bold text-white hover:text-white/80 transition-colors"
+        onClick={() => setShowGuide(true)}
+      >
+        ?
+      </button>
+      
+      {/* 引导弹窗 */}
+      {showGuide && (
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 overflow-auto p-4">
+          <div className="max-w-2xl mx-auto rounded-lg p-4 my-8 bg-black/40 border border-white/10">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-white text-xl font-bold">游戏引导</h2>
+              <button
+                onClick={toggleGuide}
+                className="text-white/60 hover:text-white/90 transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <div className="text-white space-y-4">
+              <p>点击底部对话框输入文字。</p>
+              <p>发送对话请点击对话框右侧的箭头或者按enter键。</p>
+              <p>结束对话请点击对话框左侧的x。</p>
+              <p>点击角色立绘可以查看角色信息。</p>
+              <p>点击右上角时钟图标查看历史对话。</p>
+              <p>场景中所有角色都会听见你所说的话。</p>
+              <p>他们会回应你，同时也可能与其他在场角色进行交谈。</p>
+              <p>如果你仅仅想对某一人交谈，请在对话开头加上TA的名字。</p>
+              <p>如果对话正在正常加载，却没有得到回复，这代表他们已读不回，请换一种措辞再次对话。</p>
+              <p>没想到吧！我游戏里的角色还能不理你嘿嘿嘿。</p>
+            </div>
+          </div>
+        </div>
+      )}
+      {showCharacterInfo && (
+        <CharacterInfoPopup 
+          character={selectedCharacter}
+          onClose={() => setShowCharacterInfo(false)}
+        />
+      )}
       {/* Background image */}
       <div 
         className="absolute inset-0 bg-cover bg-center z-0" 
@@ -266,19 +322,20 @@ const GameScene: React.FC<GameSceneProps> = ({
       
       {/* Character images */}
       {Array.isArray(sceneCharacters) && (
-        <div className="absolute inset-0 pointer-events-none" style={{ bottom: '0' }}>
+        <div className="absolute inset-0" style={{ bottom: '0' }} onClick={() => setShowCharacterInfo(false)}>
           <div style={calculateCharacterStyles(sceneCharacters).container}>
             {sceneCharacters.map(character => (
               <div key={character} style={calculateCharacterStyles(sceneCharacters).characters[character]}>
                 <img 
                   src={getCharacterImage(character)} 
                   alt={character} 
-                  className="h-full w-auto object-contain"
+                  className="h-full w-auto object-contain cursor-pointer"
                   style={{ 
                     maxHeight: '90vh',
                     marginBottom: 0,    // 确保图片底部无边距
                     display: 'block'    // 移除图片默认的行内间距
                   }}
+                  onClick={(e) => handleCharacterClick(character, e)}
                 />
                 {/* 在 return 语句中修改对话气泡部分 */}
                 {speeches.filter(speech => speech.character === character && speech.isActive).map((speech, index) => (

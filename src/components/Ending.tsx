@@ -11,7 +11,7 @@ interface EndingProps {
   script?: string[];
 }
 
-const Ending: React.FC<EndingProps> = ({ conversationId, onComplete, onAddEndingToScript, sceneCharacters = [], characterMemories = {}, characterGoals = {}, script = [] }) => {
+const Ending: React.FC<EndingProps> = ({ onComplete, onAddEndingToScript, sceneCharacters = [], characterMemories = {}, characterGoals = {}, script = [] }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
