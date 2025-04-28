@@ -14,7 +14,7 @@ const Guide: React.FC<GuideProps> = ({ onContinue }) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="max-w-3xl text-lg space-y-4 mb-8 text-center" style={{ fontFamily: "ZiXinFang, 'Times New Roman', serif", letterSpacing: '0.1em' }}>
+      <div className="max-w-6xl text-2xl space-y-4 mb-8 text-center" style={{ fontFamily: "ZiXinFang, 'Times New Roman', serif", letterSpacing: '0.1em' }}>
         <p>桀桀桀！当你点击开始游戏的那一刻后，你的一部分灵魂被我转移到哈姆雷特身上啦！</p>
         <p>你问谁是哈姆雷特？哈姆雷特是由英国剧作家威廉·莎士比亚创作于1599年至1602年间的一部悲剧作品的主角。戏剧讲述了叔叔克劳狄斯谋害了哈姆雷特的父亲，篡取了王位，并娶了国王的遗孀乔特鲁德；哈姆雷特王子因此为父王向叔叔复仇。</p>
         <p>所以，你的目标是扮演哈姆雷特，向当朝的国王复仇？</p>
