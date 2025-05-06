@@ -190,7 +190,8 @@ function App() {
         >
           <MapSelection 
             onComplete={handleMapSelectionComplete} 
-            sceneCount={sceneCount} 
+            sceneCount={sceneCount}
+            characterGoals={characterGoals}
           />
         </motion.div>
       )}

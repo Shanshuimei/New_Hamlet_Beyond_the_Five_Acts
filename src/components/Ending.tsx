@@ -30,8 +30,6 @@ const Ending: React.FC<EndingProps> = ({ onComplete, onAddEndingToScript, sceneC
           },
           body: JSON.stringify({
             inputs: {
-              npc: sceneCharacters.join(','),
-              people: sceneCharacters.length,
               ghost_memory: characterMemories.ghost_memory || '',
               aofeiliya_memory: characterMemories.aofeiliya_memory || '',
               boluoniesi_memory: characterMemories.boluoniesi_memory || '',
